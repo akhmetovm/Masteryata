@@ -174,17 +174,17 @@ void print_number(int value, int number_position) {
 
 // печатаем начальный текст
 void print_start_text() {
-  String txt = "MastIryata 2024";
+  String txt = "Masteryata 2024";
   bool flag = 1;
 
   while (flag) {
-    //выводим текс из-за экрана
+    //выводим текст из-за экрана
     for (int i = 14; i >= 0; i--) {
       int button = analogRead(_key_pin);
       lcd.setCursor(0, 0);
       for (int k = i; k <= 14; k++) lcd.print(txt[k]);
       delay(400);
-      if (button > 700 && button < 800) {flag = 0; break;}
+    if (button > 700 && button < 800) {flag = 1; break;}
     }
     
     // если не была нажата кнопка
@@ -195,7 +195,7 @@ void print_start_text() {
         button = 750;
         lcd.scrollDisplayRight();
         delay(400);
-        if (button > 700 && button < 800) {flag = 0; break;}
+        if (button > 700 && button < 800) {flag = 0;}
       }
     }
     lcd.clear();
@@ -206,7 +206,7 @@ void print_start_text() {
 
 // выводим время
 void print_current_time(int hours, int minutes) {
-  print_number(hours%10, 0);
+  print_number(hours/10, 0);
   print_number(hours%10, 4);  
   print_number(minutes/10, 8);
   print_number(minutes%10, 12);
@@ -260,7 +260,7 @@ void settings_time() {
       }
       looper = 0;
     }
-    else if (button > 100 && button < 400) { 
+    else if (button > 100 && button < 200) { 
       change = 1;
     }
     else if (button > 300 && button < 400) { 
@@ -270,7 +270,7 @@ void settings_time() {
     // изменяем выбранный символ на значение
     switch(change_digit) {
       case 0:
-        current_hours += change; 
+        current_hours += change *10;
         break;
       case 1:
         current_hours += change;
@@ -336,16 +336,16 @@ void loop() {
   print_current_time (hours, minutes);
 
   // мигаем точками раз в полсекунды
-  if (millis() - blink_point_time >= 1000) {  
+  if (millis() - blink_point_time >= 500) {  
     lcd.setCursor(7, 0);
     lcd.write(5);
     lcd.setCursor(7, 1);
     lcd.write(5);
     if (millis() - blink_point_time >= 1000) {blink_point_time = millis();}
   } else {
-    lcd.setCursor(7, 0);
-    lcd.write(" ");
     lcd.setCursor(7, 1);
+    lcd.write(" ");
+    lcd.setCursor(7, 0);
     lcd.write(" ");    
   }
 }
